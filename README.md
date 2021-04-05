@@ -1,10 +1,11 @@
-# TSDX React User Guide
+# Paynow React SDK
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+> Not officially supported by Paynow.
 
-> This TSDX setup is meant for developing React component libraries (not apps!) that can be published to NPM. If you’re looking to build a React-based app, you should use `create-react-app`, `razzle`, `nextjs`, `gatsby`, or `react-static`.
+> This repo was bootstrapped using TSDX
 
-> If you’re new to TypeScript and React, checkout [this handy cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet/)
+# Sign in to Paynow and get integration details
+Before you can start making requests to Paynow's API, you need to get an integration ID and integration Key from Paynow.
 
 ## Commands
 
@@ -43,30 +44,6 @@ Jest tests are set up to run with `npm test` or `yarn test`.
 ### Bundle analysis
 
 Calculates the real cost of your library using [size-limit](https://github.com/ai/size-limit) with `npm run size` and visulize it with `npm run analyze`.
-
-#### Setup Files
-
-This is the folder structure we set up for you:
-
-```txt
-/example
-  index.html
-  index.tsx       # test your component here in a demo app
-  package.json
-  tsconfig.json
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
-```
-
-#### React Testing Library
-
-We do not set up `react-testing-library` for you yet, we welcome contributions and documentation on this.
 
 ### Rollup
 
