@@ -9,7 +9,6 @@ Before you can start making requests to Paynow's API, you need to get an integra
 
 ## Commands
 
-TSDX scaffolds your new library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
 
 The recommended workflow is to run TSDX in one terminal:
 
