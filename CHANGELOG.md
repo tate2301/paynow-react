@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/tate2301/paynow-react/compare/v0.1.4...v0.1.5) (2021-12-23)
+
+
+### Features
+
+* update docs ([6b4057b](https://github.com/tate2301/paynow-react/commit/6b4057b8618579eb7b3a6eaaf477abfc2d8ba3ad))
+* update docw ([034a1b2](https://github.com/tate2301/paynow-react/commit/034a1b2957dee7d2f84feeece3a1fb94f51b8797))
+
+
+### Bug Fixes
+
+* add env to ci ([093390d](https://github.com/tate2301/paynow-react/commit/093390d07573f4c4b3ef58aa75931a486faa157d))
+* fix deps ([34fafb5](https://github.com/tate2301/paynow-react/commit/34fafb580e898b916df6639a82fe7daa91a067f6))
+* fix env structure in yml ci ([325c7fe](https://github.com/tate2301/paynow-react/commit/325c7fed9bbcd857ee58c7f9bdf3c535546afec0))
+* fix env structure in yml ci ([8ffff8c](https://github.com/tate2301/paynow-react/commit/8ffff8c6464a939d1172f83d5d63a8ada2c88c75))
+* fix env structure in yml ci ([d642ec9](https://github.com/tate2301/paynow-react/commit/d642ec9bdded476fcf36d58acbc2b58ea66b6161))
+* fix for CI ([558ff14](https://github.com/tate2301/paynow-react/commit/558ff147096d685b8763267a14689718b73606e0))
+* fix tests to pass hahaha ([2b8f1d7](https://github.com/tate2301/paynow-react/commit/2b8f1d749a8fde457ea7223469b1b0bc4a4efd4c))
+* remove 10.x node from CI ([f2e03e9](https://github.com/tate2301/paynow-react/commit/f2e03e94ede0de70277a2915f4338b9f79f112be))
+* remove breaking deps ([6916554](https://github.com/tate2301/paynow-react/commit/691655453673655b7e13752d898822a7bf385791))
+* remove env for ci ([fa99e4e](https://github.com/tate2301/paynow-react/commit/fa99e4e6d868e708b159c2b2bb1b24fe2a9dbb33))
+* restore yarn.lock ([1f570a7](https://github.com/tate2301/paynow-react/commit/1f570a74c8a68de8f4e8c113428c14862ee78eba))
+* switch to borales/actions-yarn@v2.3.0 ([6b439e4](https://github.com/tate2301/paynow-react/commit/6b439e4f9af5d48da5fe29136f4dcf6a4abc7f2b))
+
 ### [0.1.4](https://github.com/tate2301/paynow-react/compare/v0.1.3...v0.1.4) (2021-12-23)
 
 
