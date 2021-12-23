@@ -13,6 +13,7 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
+    "preview": "parcel ./example/index.html",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
@@ -55,6 +56,7 @@
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "husky": "^7.0.4",
+    "parcel": "^2.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "size-limit": "^4.10.2",

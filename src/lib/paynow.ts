@@ -9,6 +9,10 @@ import {
 
 import qs from 'qs';
 
+const paynowAxiosInstance = axios.create({
+  baseURL: 'https://cors-anywhere.herokuapp.com/https://www.paynow.co.zw',
+});
+
 export default class Paynow {
   constructor(
     public integrationId: string,
@@ -60,17 +64,19 @@ export default class Paynow {
   init(payment: Payment) {
     this.validate(payment);
     let data = this.build(payment);
-    return axios
+    return paynowAxiosInstance
       .post(URL_INITIATE_TRANSACTION, qs.stringify(data), {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          mode: 'no-cors',
         },
       })
       .then(res => {
         return this.parse(res.data);
       })
       .catch(function(err) {
-        console.log('An error occured while initiating transaction', err);
+        console.error(err);
+        throw 'An error occured while initiating the transaction';
       });
   }
 
@@ -89,13 +95,14 @@ export default class Paynow {
 
     let data = this.buildMobile(payment, phone, method);
 
-    return axios
+    return paynowAxiosInstance
       .post(URL_INITIATE_MOBILE_TRANSACTION, data)
       .then(res => {
         return this.parse(res.data);
       })
       .catch(function(err) {
-        console.log('An error occured while initiating transaction', err);
+        console.error(err);
+        throw 'An error occured while initiating the transaction';
       });
   }
 

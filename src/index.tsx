@@ -1,9 +1,18 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import * as React from 'react';
 import PaymentModal from './components/Payment/Payment';
-import { PaynowReactProps } from './lib/types';
+import { PaymentProps, PaynowReactProps } from './lib/types';
 import { PaynowContext, PaynowContextProvider } from './PaynowContext';
 
 export default function PaynowReactWrapper(props: PaynowReactProps) {
+  return (
+    <PaynowContextProvider>
+      <PaynowWrapperConsumer {...props}>{props.children}</PaynowWrapperConsumer>
+    </PaynowContextProvider>
+  );
+}
+
+const PaynowWrapperConsumer = (props: PaynowReactProps) => {
   const { setData } = React.useContext(PaynowContext);
   React.useEffect(() => {
     const { integration_id, integration_key, result_url, return_url } = props;
@@ -13,13 +22,12 @@ export default function PaynowReactWrapper(props: PaynowReactProps) {
       result_url,
       return_url,
     });
-  }, [props]);
+  }, []);
+  return <>{props.children}</>;
+};
 
-  return (
-    <PaynowContextProvider>
-      <div></div>
-    </PaynowContextProvider>
-  );
-}
-
-export const PaynowPayment = PaymentModal;
+export const PaynowPayment = (props: PaymentProps) => (
+  <ChakraProvider>
+    <PaymentModal {...props} />
+  </ChakraProvider>
+);

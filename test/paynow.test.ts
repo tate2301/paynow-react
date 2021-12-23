@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @jest-environment jsdom
  */
 import Payment from '../src/lib/classes/payment';
 import Paynow from '../src/lib/paynow';
