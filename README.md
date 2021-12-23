@@ -129,4 +129,4 @@ const Checkout = () => {
 
 ## Contribution
 
-Please see our [contribution guidelines](https://github.com/tate2301/paynow-react/blob/main/CONTRIBUTING.md) to learn how you can contribute to this project.
+Please see our [contribution guidelines](https://github.com/tate2301/paynow-react/blob/main/CONTRIBUTING.md) to learn how you can contribute to this paynow-react.
