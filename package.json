@@ -18,6 +18,8 @@
     "prepare": "tsdx build",
     "release": "standard-version",
     "size": "size-limit",
+    "husky-prepare": "husky install",
+    "format": "prettier --write src",
     "analyze": "size-limit --why"
   },
   "peerDependencies": {
@@ -52,7 +54,7 @@
     "@types/qs": "^6.9.7",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
-    "husky": "^6.0.0",
+    "husky": "^7.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "size-limit": "^4.10.2",
@@ -62,9 +64,14 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
+    "@commitlint/config-conventional": "^15.0.0",
+    "autoprefixer": "^10.4.0",
     "axios": "^0.24.0",
+    "commitlint": "^15.0.0",
     "dotenv": "^10.0.0",
+    "eslint": "^8.5.0",
     "js-sha512": "^0.8.0",
+    "lint-staged": "^12.1.3",
     "qs": "^6.10.2"
   }
 }
