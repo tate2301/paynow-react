@@ -22,6 +22,22 @@ export default class Paynow {
   ) {}
 
   /**
+   * Update the return url
+   * @param url {String}
+   */
+  setReturnUrl = (url: string) => {
+    this.returnUrl = url;
+  };
+
+  /**
+   * Update the result url
+   * @param url {String}
+   */
+  setResultUrl(url: string) {
+    this.resultUrl = url;
+  }
+
+  /**
    * Send a payment to paynow
    * @param payment
    */

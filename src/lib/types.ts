@@ -11,7 +11,6 @@ export type PaynowReactProps = {
 export type PaymentProps = {
   items: [Item];
   label: string;
-  footerText: string;
   paymentMode: PaymentMode;
   isOpen: boolean;
   onClose: () => void;

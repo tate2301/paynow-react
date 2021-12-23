@@ -25,7 +25,6 @@ import { getMobileNetworkForNumber } from '../../lib/util';
 export default function PaymentModal({
   items,
   label,
-  footerText,
   paymentMode,
   isOpen,
   onClose,
@@ -42,7 +41,7 @@ export default function PaymentModal({
 
   const isMobilePayment = paymentMode === 'mobile';
 
-  useEffect(() => {}, [items, label, footerText, paymentMode]);
+  useEffect(() => {}, [items, label, paymentMode]);
   /*
   const subtract = (index: number) => {
     if (myItems[index].quantity > 1) {
