@@ -126,24 +126,8 @@ describe('Paynow Normal Integration', () => {
 });
 
 describe('Paynow Mobile Integration', () => {
-  const OLD_ENV = process.env;
-
-  beforeEach(() => {
-    jest.resetModules();
-    process.env = { ...OLD_ENV };
-  });
-
-  afterAll(() => {
-    process.env = OLD_ENV;
-  });
-
-  const PAYNOW_INTEGRATION_ID = process.env.PAYNOW_INTEGRATION_ID;
-  const PAYNOW_INTEGRATION_KEY = process.env.PAYNOW_INTEGRATION_KEY;
-
-  it('Should receive enviroment variables', () => {
-    expect(PAYNOW_INTEGRATION_ID).toBeDefined();
-    expect(PAYNOW_INTEGRATION_KEY).toBeDefined();
-  });
+  const PAYNOW_INTEGRATION_ID = '11160';
+  const PAYNOW_INTEGRATION_KEY = '2d0a5f25-8598-4f93-9d78-422a3b0b825b';
 
   let paynow: Paynow;
   let payment: Payment;
