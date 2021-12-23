@@ -105,9 +105,10 @@ export default class Paynow {
       .then(res => {
         return this.parse(res.data);
       })
-      .catch(function(err) {
+      .catch(function(err: Error) {
         console.error(err);
-        throw err ?? 'An error occured while initiating the transaction';
+        throw err.message ??
+          'An error occured while initiating the transaction';
       });
   }
 
@@ -136,7 +137,7 @@ export default class Paynow {
     if (response) {
       let parsedResponseURL = this.parseQuery((response as unknown) as string);
       if (parsedResponseURL.error === 'Insufficient balance') {
-        throw 'Insufficient balance';
+        throw new Error('Insufficient balance');
       }
       if (
         parsedResponseURL.status.toString() !== 'error' &&

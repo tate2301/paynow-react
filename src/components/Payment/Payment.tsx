@@ -135,7 +135,7 @@ export default function PaymentModal({
             />
             <Divider my={2} />
 
-            <Box my={4} maxH={200} overflowY={'auto'}>
+            <Box maxH={200} overflowY={'auto'} experimental_spaceY={2}>
               {myItems.map(item => (
                 <Flex
                   alignItems={'center'}
@@ -151,9 +151,17 @@ export default function PaymentModal({
                     />
                   </Box>
                   <Box flex={1}>
-                    <Heading mb={1} fontSize={'md'}>
-                      {item.title}
-                    </Heading>
+                    <Flex justifyContent={'space-between'}>
+                      <Heading mb={1} fontSize={'md'} isTruncated>
+                        {item.title}
+                      </Heading>
+                      <Heading fontSize={'md'} flex={1} pl={2}>
+                        {Intl.NumberFormat('en-us', {
+                          style: 'currency',
+                          currency: 'USD',
+                        }).format(item.amount)}
+                      </Heading>
+                    </Flex>
                     <Flex alignItems={'center'} experimental_spaceX={2}>
                       <Text>Quantity: {item.quantity}</Text>
                     </Flex>
@@ -161,6 +169,7 @@ export default function PaymentModal({
                 </Flex>
               ))}
             </Box>
+            <Divider py={2} />
             {isMobilePayment ? (
               <Box py={2} border={'1px'} borderColor={'ActiveBorder'}>
                 <Text>
