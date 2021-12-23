@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/tate2301/paynow-react/compare/v0.1.2...v0.1.3) (2021-12-23)
+
+
+### Bug Fixes
+
+* fix insufficient balance error behavior and other features ([33e9e87](https://github.com/tate2301/paynow-react/commit/33e9e87bf9665e020bdd9d75f5863760acbb01b6))
+
 ### [0.1.2](https://github.com/tate2301/paynow-react/compare/v0.1.1...v0.1.2) (2021-12-23)
 
 
