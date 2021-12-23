@@ -151,11 +151,17 @@ export default function PaymentModal({
                     />
                   </Box>
                   <Box flex={1}>
-                    <Flex justifyContent={'space-between'}>
+                    <Flex justifyContent={'space-between'} w="full">
                       <Heading mb={1} fontSize={'md'} isTruncated>
                         {item.title}
                       </Heading>
-                      <Heading fontSize={'md'} flex={1}>
+                      <Heading
+                        fontWeight={'medium'}
+                        fontSize={'md'}
+                        flex={1}
+                        pl={2}
+                        textAlign={'right'}
+                      >
                         {Intl.NumberFormat('en-us', {
                           style: 'currency',
                           currency: 'USD',
