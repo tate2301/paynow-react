@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/tate2301/paynow-react/compare/v0.1.5...v0.1.6) (2021-12-23)
+
+
+### Features
+
+* add callback for mobile payments ([aef3910](https://github.com/tate2301/paynow-react/commit/aef391049c8a7b9725ae8df8173420e651447266))
+
 ### [0.1.5](https://github.com/tate2301/paynow-react/compare/v0.1.4...v0.1.5) (2021-12-23)
 
 
