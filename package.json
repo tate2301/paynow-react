@@ -37,16 +37,16 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "paynow-js",
-  "author": "Tatenda Christopher Chinyamakobvu",
-  "module": "dist/paynow-js.esm.js",
+  "name": "paynow-react",
+  "author": "tate231",
+  "module": "dist/paynow-react.esm.js",
   "size-limit": [
     {
-      "path": "dist/paynow-js.cjs.production.min.js",
+      "path": "dist/paynow-react.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/paynow-js.esm.js",
+      "path": "dist/paynow-react.esm.js",
       "limit": "10 KB"
     }
   ],
