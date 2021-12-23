@@ -9,10 +9,7 @@ jobs:
       matrix:
         node: ['12.x', '14.x']
         os: [ubuntu-latest, windows-latest, macOS-latest]
-        env: 
-          PAYNOW_INTEGRATION_ID = 11160
-          PAYNOW_INTEGRATION_KEY = 2d0a5f25-8598-4f93-9d78-422a3b0b825b
-
+        
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -30,6 +27,10 @@ jobs:
 
       - name: Test
         run: yarn test --ci --coverage --maxWorkers=2
+        env: 
+          PAYNOW_INTEGRATION_ID = 11160
+          PAYNOW_INTEGRATION_KEY = 2d0a5f25-8598-4f93-9d78-422a3b0b825b
+
 
       - name: Build
         run: yarn build
