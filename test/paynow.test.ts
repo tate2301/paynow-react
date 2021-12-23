@@ -62,7 +62,7 @@ describe('Paynow Core', () => {
   it('Should be able to build mobile payment', () => {
     const payment = new Payment('reference', 'authEmail');
     payment.add('Test Item', 10, 1);
-    let data = paynow.buildMobile(payment, '0712345678', 'SMS');
+    let data = paynow.buildMobile(payment, '0712345678', 'ecocash');
     expect(data).toBeDefined();
   });
 
@@ -74,7 +74,7 @@ describe('Paynow Core', () => {
   });
 });
 
-describe('Paynow Integration', () => {
+describe('Paynow Normal Integration', () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
@@ -121,6 +121,55 @@ describe('Paynow Integration', () => {
     let payment = paynow.createPayment('Invoice 1');
     payment.add('Bananas', 10.1, 1);
     let data = await paynow.send(payment);
+    await expect(data).toBeDefined();
+  });
+});
+
+describe('Paynow Mobile Integration', () => {
+  const OLD_ENV = process.env;
+
+  beforeEach(() => {
+    jest.resetModules();
+    process.env = { ...OLD_ENV };
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV;
+  });
+
+  const PAYNOW_INTEGRATION_ID = process.env.PAYNOW_INTEGRATION_ID;
+  const PAYNOW_INTEGRATION_KEY = process.env.PAYNOW_INTEGRATION_KEY;
+
+  it('Should receive enviroment variables', () => {
+    expect(PAYNOW_INTEGRATION_ID).toBeDefined();
+    expect(PAYNOW_INTEGRATION_KEY).toBeDefined();
+  });
+
+  let paynow: Paynow;
+  let payment: Payment;
+
+  it('Should instantiate paynow', () => {
+    paynow = new Paynow(
+      PAYNOW_INTEGRATION_ID!,
+      PAYNOW_INTEGRATION_KEY!,
+      'http://localhost:3000/gateways/paynow/update',
+      'http://localhost:3000/'
+    );
+    expect(paynow).toBeInstanceOf(Paynow);
+  });
+
+  it('Should create a mobile payment', () => {
+    payment = paynow.createPayment('Invoice 1', 'tatendachris@gmail.com');
+    expect(payment).toBeInstanceOf(Payment);
+  });
+
+  it('Should add item to cart', () => {
+    payment.add('Bananas', 10.1, 1);
+    expect(payment.items.length()).toBe(1);
+  });
+
+  it('Should send mobile payment to paynow', async () => {
+    let data = await paynow.sendMobile(payment, '0771111111', 'ecocash');
     await expect(data).toBeDefined();
   });
 });

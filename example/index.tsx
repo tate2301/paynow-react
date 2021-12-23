@@ -31,8 +31,8 @@ const App = () => {
         <PaynowPayment
           items={items}
           footerText="Hello there"
-          label="My payment"
-          paymentMode="default"
+          label="Express checkout"
+          paymentMode="mobile"
           isOpen={isOpen}
           onClose={onClose}
         />

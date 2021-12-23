@@ -96,13 +96,18 @@ export default class Paynow {
     let data = this.buildMobile(payment, phone, method);
 
     return paynowAxiosInstance
-      .post(URL_INITIATE_MOBILE_TRANSACTION, data)
+      .post(URL_INITIATE_MOBILE_TRANSACTION, qs.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          mode: 'no-cors',
+        },
+      })
       .then(res => {
         return this.parse(res.data);
       })
       .catch(function(err) {
         console.error(err);
-        throw 'An error occured while initiating the transaction';
+        throw err ?? 'An error occured while initiating the transaction';
       });
   }
 
@@ -130,6 +135,9 @@ export default class Paynow {
     }
     if (response) {
       let parsedResponseURL = this.parseQuery((response as unknown) as string);
+      if (parsedResponseURL.error === 'Insufficient balance') {
+        throw 'Insufficient balance';
+      }
       if (
         parsedResponseURL.status.toString() !== 'error' &&
         !this.verifyHash(parsedResponseURL)
@@ -289,9 +297,11 @@ export default class Paynow {
    * @returns {PromiseLike<InitResponse> | Promise<InitResponse>}
    */
   pollTransaction(url: string) {
-    return axios.post(url).then(res => {
-      return this.parse(res.data);
-    });
+    return axios
+      .post(`https://cors-anywhere.herokuapp.com/${url}`)
+      .then(res => {
+        return this.parse(res.data);
+      });
   }
 
   /**

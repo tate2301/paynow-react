@@ -20,6 +20,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { PaymentProps } from '../../lib/types';
+import { getMobileNetworkForNumber } from '../../lib/util';
 
 export default function PaymentModal({
   items,
@@ -59,22 +60,49 @@ export default function PaymentModal({
   const submitMobilePayment = (e: any) => {
     e.preventDefault();
     const phone = e.target.phone.value;
-    const method = e.target.method.value;
+    const email = e.target.email.value;
     if (phone.length < 10) {
       setError('Please enter a valid phone number');
       return;
     }
 
+    let paidOrError = false;
+
     setLoading(true);
-    const payment = paynow?.createPayment(label);
+    const payment = paynow?.createPayment(label, email);
     items.map(item => payment?.add(item.title, item.amount, item.quantity));
     paynow
-      ?.sendMobile(payment!, e.target.phone.value, method)
+      ?.sendMobile(payment!, phone, getMobileNetworkForNumber(phone))
       .then(data => {
-        setLoading(false);
         console.log(data);
+        let pollInterval = setInterval(() => {
+          paynow
+            .pollTransaction(data?.pollUrl as string)
+            .then(data => {
+              console.log(data);
+
+              if (data?.status === 'paid' && !paidOrError) {
+                setLoading(false);
+                paidOrError = true;
+                return clearInterval(pollInterval);
+              } else if (data?.status === 'cancelled' && !paidOrError) {
+                setLoading(false);
+                setError(
+                  'The payment has been cancelled by the user. Please try again.'
+                );
+                paidOrError = true;
+                return clearInterval(pollInterval);
+              }
+            })
+            .catch(err => {
+              setError(err.message);
+            });
+        }, 1000);
       })
-      .catch(err => setError(err));
+      .catch(err => {
+        setLoading(false);
+        setError(err);
+      });
   };
 
   const submitWebPayment = (e: any) => {
@@ -154,6 +182,16 @@ export default function PaymentModal({
                     {error && (
                       <FormHelperText color={'red.500'}>{error}</FormHelperText>
                     )}
+                  </FormControl>
+                  <FormControl py={2}>
+                    <FormLabel>What's your email address</FormLabel>
+                    <Input
+                      type="email"
+                      autoComplete="off"
+                      name="email"
+                      variant={'filled'}
+                      required
+                    />
                   </FormControl>
                   <FormControl py={2}>
                     <Button
