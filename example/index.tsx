@@ -27,8 +27,9 @@ const config = {
 
 const App = () => {
   const [isOpen, setIsOpen] = React.useState(true);
-  const onClose = () => {
+  const onClose = data => {
     setIsOpen(false);
+    console.log(data);
   };
   return (
     <div>

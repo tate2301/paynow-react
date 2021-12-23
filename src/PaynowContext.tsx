@@ -31,7 +31,6 @@ export const PaynowContextProvider = ({
   let [paynow, setPaynow] = useState<Paynow | null>(null);
 
   const updateValues = (data: any) => {
-    console.log(data);
     setData(data);
   };
 
@@ -43,8 +42,6 @@ export const PaynowContextProvider = ({
       );
     }
   }, [data]);
-
-  console.log({ data });
 
   return (
     <PaynowContext.Provider value={{ paynow, setData: updateValues }}>
