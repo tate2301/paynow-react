@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/tate2301/paynow-react/compare/v0.1.3...v0.1.4) (2021-12-23)
+
+
+### Features
+
+* add payment modal ([8b285ef](https://github.com/tate2301/paynow-react/commit/8b285ef71d4e499554619c96e71deab85d7ba5e8))
+
+
+### Bug Fixes
+
+* fix price style ([7f54c87](https://github.com/tate2301/paynow-react/commit/7f54c8754556e69b54e9dda665968da82c8117e6))
+* more price style fixes ([e3e096b](https://github.com/tate2301/paynow-react/commit/e3e096ba6e99546868b7b88b9183eaf9a38636b9))
+
 ### [0.1.3](https://github.com/tate2301/paynow-react/compare/v0.1.2...v0.1.3) (2021-12-23)
 
 
