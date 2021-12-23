@@ -1,20 +1,109 @@
-import axios from 'axios';
-import { InitResponse } from './classes/InitResponse';
-import Payment from './classes/payment';
-import { StatusResponse } from './classes/StatusResponse';
+import Payment from './types/payment';
+import * as http from 'request-promise-native';
 import {
   URL_INITIATE_MOBILE_TRANSACTION,
   URL_INITIATE_TRANSACTION,
+  RESPONSE_ERROR,
+  RESPONSE_OK,
 } from './constants';
+import request = require('request');
 
-import qs from 'qs';
+//#region StatusResponse Class
+/**
+ *
+ * @property {String} reference - merchant transaction reference .
+ * @property {String} amount - original amount for the transaction.
+ * @property {String} paynowReference  - the Paynow transaction reference.
+ * @property {String} pollUrl - the URL on Paynow the merchant can poll to confirm the transaction’s status.
+ * @property {String} status - transaction status returned from paynow.
+ * @property {String} error - error message sent from Paynow  (if any).
+ *
+ * @param data data from the status response
+ */
+
+export class StatusResponse {
+  reference: String;
+  amount: String;
+  paynowReference: String;
+  pollUrl: String;
+  status: String;
+  error: String;
+
+  constructor(data: any) {
+    if (data.status.toLowerCase() === RESPONSE_ERROR) {
+      this.error = data.error;
+    } else {
+      this.reference = data.reference;
+      this.amount = data.amount;
+      this.paynowReference = data.paynowreference;
+      this.pollUrl = data.pollurl;
+      this.status = data.status;
+    }
+  }
+}
+//#endregion
+
+//#region InitResponse Class
+/**
+ *
+ * @property {boolean} success - indicates if initiate request was successful or not.
+ * @property {boolean} hasRedirect - indicates if the response has a URL to redirect to.
+ * @property {String} redirectUrl - the URL the user should be redirected to so they can make a payment.
+ * @property {String} error - error message sent from Paynow (if any).
+ * @property {String} pollUrl  - pollUrl sent from Paynow that can be used to check transaction status.
+ * @property {String} instructions - instructions for USSD push for customers to dial incase of mobile money payments.
+ * @property {String} status - status from Paynow.
+ *
+ * @param data - data from the Response.
+ *
+ */
+
+export class InitResponse {
+  success: boolean;
+  hasRedirect: boolean;
+  redirectUrl: String;
+  error: String;
+  pollUrl: String;
+  instructions: String;
+  status: String;
+
+  constructor(data: any) {
+    this.status = data.status.toLowerCase();
+    this.success = this.status === RESPONSE_OK;
+    this.hasRedirect = typeof data.browserurl !== 'undefined';
+
+    if (!this.success) {
+      this.error = data.error;
+    } else {
+      this.pollUrl = data.pollurl;
+
+      if (this.hasRedirect) {
+        this.redirectUrl = data.browserurl;
+      }
+
+      if (typeof data.instructions !== 'undefined') {
+        this.instructions = data.instructions;
+      }
+    }
+  }
+}
+//#endregion
+
+/**
+ * Paynow Class
+ *
+ * @param integrationId {String} Merchant's integration id
+ * @param integrationKey {String} Merchant's integration key
+ * @param resultUrl {String} Url where where transaction status will be sent
+ * @param returnUrl {String} Url to redirect the user after payment
+ **/
 
 export default class Paynow {
   constructor(
     public integrationId: string,
     public integrationKey: string,
-    public resultUrl?: string,
-    public returnUrl?: string
+    public resultUrl: string,
+    public returnUrl: string
   ) {}
 
   /**
@@ -39,7 +128,7 @@ export default class Paynow {
    * @param {String} authEmail This is the email address of the person making payment. Required for mobile transactions
    * @returns {Payment}
    */
-  createPayment(reference: string, authEmail?: string): Payment {
+  createPayment(reference: string, authEmail: string): Payment {
     return new Payment(reference, authEmail);
   }
 
@@ -60,14 +149,14 @@ export default class Paynow {
   init(payment: Payment) {
     this.validate(payment);
     let data = this.build(payment);
-    return axios
-      .post(URL_INITIATE_TRANSACTION, qs.stringify(data), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      })
-      .then(res => {
-        return this.parse(res.data);
+    return http({
+      method: 'POST',
+      uri: URL_INITIATE_TRANSACTION,
+      form: data,
+      json: false,
+    })
+      .then((response: Response) => {
+        return this.parse(response);
       })
       .catch(function(err) {
         console.log('An error occured while initiating transaction', err);
@@ -82,17 +171,21 @@ export default class Paynow {
   initMobile(payment: Payment, phone: string, method: string) {
     this.validate(payment);
 
-    if (!this.isValidEmail(payment.authEmail ?? ''))
+    if (!this.isValidEmail(payment.authEmail))
       this.fail(
         'Invalid email. Please ensure that you pass a valid email address when initiating a mobile payment'
       );
 
     let data = this.buildMobile(payment, phone, method);
 
-    return axios
-      .post(URL_INITIATE_MOBILE_TRANSACTION, data)
-      .then(res => {
-        return this.parse(res.data);
+    return http({
+      method: 'POST',
+      uri: URL_INITIATE_MOBILE_TRANSACTION,
+      form: data,
+      json: false,
+    })
+      .then((response: Response) => {
+        return this.parse(response);
       })
       .catch(function(err) {
         console.log('An error occured while initiating transaction', err);
@@ -123,6 +216,7 @@ export default class Paynow {
     }
     if (response) {
       let parsedResponseURL = this.parseQuery((response as unknown) as string);
+
       if (
         parsedResponseURL.status.toString() !== 'error' &&
         !this.verifyHash(parsedResponseURL)
@@ -220,8 +314,8 @@ export default class Paynow {
    */
   build(payment: Payment) {
     let data: { [key: string]: string } = {
-      resulturl: this.resultUrl ?? '',
-      returnurl: this.returnUrl ?? '',
+      resulturl: this.resultUrl,
+      returnurl: this.returnUrl,
       reference: payment.reference,
       amount: payment.total().toString(),
       id: this.integrationId,
@@ -253,13 +347,13 @@ export default class Paynow {
     method: string
   ): Error | { [key: string]: string } {
     let data: { [key: string]: string } = {
-      resulturl: this.resultUrl ?? '',
-      returnurl: this.returnUrl ?? '',
+      resulturl: this.resultUrl,
+      returnurl: this.returnUrl,
       reference: payment.reference,
       amount: payment.total().toString(),
       id: this.integrationId,
       additionalinfo: payment.info(),
-      authemail: payment.authEmail ?? '',
+      authemail: payment.authEmail,
       phone: phone,
       method: method,
       status: 'Message',
@@ -282,8 +376,13 @@ export default class Paynow {
    * @returns {PromiseLike<InitResponse> | Promise<InitResponse>}
    */
   pollTransaction(url: string) {
-    return axios.post(url).then(res => {
-      return this.parse(res.data);
+    return http({
+      method: 'POST',
+      uri: url,
+      form: null,
+      json: false,
+    }).then((response: Response) => {
+      return this.parse(response);
     });
   }
 
