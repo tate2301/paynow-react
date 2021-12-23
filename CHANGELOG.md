@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/tate2301/paynow-react/compare/v0.1.1...v0.1.2) (2021-12-23)
+
+
+### Features
+
+* add payment modal ([e6df08d](https://github.com/tate2301/paynow-react/commit/e6df08df379e15c2187756e7cf093af7e2197e87))
+* add paynow context ([87518f0](https://github.com/tate2301/paynow-react/commit/87518f0821c42e78d47c43211fd2b2cf48fbf344))
+* add submit web payment ([4c086a4](https://github.com/tate2301/paynow-react/commit/4c086a4dbc6e0ebb4528bb9f348afbe984aa5d62))
+
 ### 0.1.1 (2021-12-23)
 
 
