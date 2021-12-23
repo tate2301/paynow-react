@@ -67,7 +67,6 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^1.7.3",
-    "@commitlint/config-conventional": "^15.0.0",
     "@emotion/react": "11",
     "@emotion/styled": "11",
     "autoprefixer": "^10.4.0",
