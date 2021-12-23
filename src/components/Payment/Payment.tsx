@@ -155,7 +155,7 @@ export default function PaymentModal({
                       <Heading mb={1} fontSize={'md'} isTruncated>
                         {item.title}
                       </Heading>
-                      <Heading fontSize={'md'} flex={1} pl={2}>
+                      <Heading fontSize={'md'} flex={1}>
                         {Intl.NumberFormat('en-us', {
                           style: 'currency',
                           currency: 'USD',
