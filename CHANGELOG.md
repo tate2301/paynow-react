@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/tate2301/paynow-react/compare/v0.1.6...v0.1.7) (2021-12-23)
+
+
+### Features
+
+* remove console.logs ([19a3637](https://github.com/tate2301/paynow-react/commit/19a3637902cb515c562e3af3d9f736813ad8896b))
+
 ### [0.1.6](https://github.com/tate2301/paynow-react/compare/v0.1.5...v0.1.6) (2021-12-23)
 
 
