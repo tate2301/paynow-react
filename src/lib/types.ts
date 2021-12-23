@@ -13,7 +13,7 @@ export type PaymentProps = {
   label: string;
   paymentMode: PaymentMode;
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (data: any) => void;
 };
 
 export type Item = {

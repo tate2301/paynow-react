@@ -78,11 +78,10 @@ export default function PaymentModal({
           paynow
             .pollTransaction(data?.pollUrl as string)
             .then(data => {
-              console.log(data);
-
               if (data?.status === 'paid' && !paidOrError) {
                 setLoading(false);
                 paidOrError = true;
+                closeModal({ paid: true, phone, email });
                 return clearInterval(pollInterval);
               } else if (data?.status === 'cancelled' && !paidOrError) {
                 setLoading(false);
@@ -90,6 +89,8 @@ export default function PaymentModal({
                   'The payment has been cancelled by the user. Please try again.'
                 );
                 paidOrError = true;
+                closeModal({ paid: false, phone, email });
+
                 return clearInterval(pollInterval);
               }
             })
@@ -118,8 +119,19 @@ export default function PaymentModal({
       .catch(err => setError(err ?? 'A network error occured'));
   };
 
+  const closeModal = (data?: any) => {
+    if (data) {
+      onClose(data);
+    } else {
+      onClose({
+        paid: false,
+        info: 'Modal closed by user',
+      });
+    }
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={closeModal}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{label}</ModalHeader>
