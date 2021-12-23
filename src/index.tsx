@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PaymentModal from './components/Payment/Payment';
 import { PaynowReactProps } from './lib/types';
 import { PaynowContext, PaynowContextProvider } from './PaynowContext';
 
@@ -20,3 +21,5 @@ export default function PaynowReactWrapper(props: PaynowReactProps) {
     </PaynowContextProvider>
   );
 }
+
+export const PaynowPayment = PaymentModal;

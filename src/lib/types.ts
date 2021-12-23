@@ -4,3 +4,18 @@ export type PaynowReactProps = {
   result_url: string;
   return_url: string;
 };
+
+export type PaymentProps = {
+  items: Item[];
+  label: string;
+  footerText: string;
+  paymentMode: PaymentMode;
+};
+
+export type Item = {
+  title: string;
+  amount: number;
+  quantity: number;
+};
+
+export type PaymentMode = 'mobile' | 'default';
