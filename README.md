@@ -15,7 +15,7 @@ Before you can start making requests to Paynow's API, you need to get an integra
 Install the library using NPM or yarn
 
 ```bash
-   yarn install paynow-react
+   yarn add paynow-react
    // or
    npm install paynow-react
 ```
