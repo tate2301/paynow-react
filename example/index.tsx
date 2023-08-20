@@ -2,8 +2,9 @@ import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import PaynowReactWrapper, { PaynowPayment } from '../dist/index';
+import { Item } from '../dist/lib/types';
 
-const items = [
+const items: Item[] = [
   {
     title: 'Annual Bleek Subscription',
     amount: 10,
@@ -15,6 +16,7 @@ const items = [
     title: 'Annual Clinch Subscription',
     amount: 200.1,
     quantity: 1,
+    image: '',
   },
 ];
 
@@ -36,7 +38,6 @@ const App = () => {
       <PaynowReactWrapper {...config}>
         <PaynowPayment
           items={items}
-          footerText="Hello there"
           label="Express checkout"
           paymentMode="mobile"
           isOpen={isOpen}

@@ -1,10 +1,9 @@
+[![npm version](https://img.shields.io/npm/v/paynow-react.svg?style=flat-square)](https://www.npmjs.com/package/paynow-react)
+[![npm downloads](https://img.shields.io/npm/dt/paynow-react.svg?style=flat-square)](https://www.npmjs.com/package/paynow-react)
+
 # Paynow React SDK
 
 > Not officially supported by Paynow.
-
-> This repo was bootstrapped using TSDX
-
-> Direct issues to https://github.com/tate2301/paynow-react/issues or on twitter [@kamfeskaya](https://twitter.com/KamfesKaya)
 
 # Getting started
 
