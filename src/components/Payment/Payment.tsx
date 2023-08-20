@@ -131,7 +131,7 @@ export default function PaymentModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={closeModal}>
+    <Modal size="xl" isOpen={isOpen} onClose={closeModal}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{label}</ModalHeader>
@@ -155,10 +155,10 @@ export default function PaymentModal({
                 >
                   <Box w={14} h={'auto'}>
                     <Image
-                      rounded={'sm'}
+                      rounded={'xl'}
                       src={item.image}
                       alt={item.title}
-                      fallbackSrc="https://pixselo.com/wp-content/uploads/2018/03/dummy-placeholder-image-400x400.jpg"
+                      fallbackSrc="https://via.placeholder.com/150"
                     />
                   </Box>
                   <Box flex={1}>
@@ -188,21 +188,18 @@ export default function PaymentModal({
             </Box>
             <Divider py={2} />
             {isMobilePayment ? (
-              <Box py={2} border={'1px'} borderColor={'ActiveBorder'}>
-                <Text>
-                  This option uses EcoCash or OneMoney wallet to pay for this
-                  transaction
-                </Text>
+              <Box py={2} mt={4}>
                 <form onSubmit={submitMobilePayment}>
                   <FormControl py={2}>
-                    <FormLabel>What's your mobile number</FormLabel>
+                    <FormLabel>Mobile number</FormLabel>
                     <Input
                       type="number"
                       maxLength={10}
                       minLength={10}
                       autoComplete="off"
                       name="phone"
-                      variant={'filled'}
+                      variant={'flushed'}
+                      placeholder="0777777777"
                       required
                     />
                     {error && (
@@ -210,29 +207,35 @@ export default function PaymentModal({
                     )}
                   </FormControl>
                   <FormControl py={2}>
-                    <FormLabel>What's your email address</FormLabel>
+                    <FormLabel>Email address</FormLabel>
                     <Input
                       type="email"
                       autoComplete="off"
                       name="email"
-                      variant={'filled'}
+                      placeholder="you@example.com"
+                      variant={'flushed'}
                       required
                     />
                   </FormControl>
-                  <FormControl py={2}>
-                    <Button
-                      isFullWidth
-                      colorScheme="blue"
-                      mr={3}
-                      type="submit"
-                      isLoading={loading}
-                    >{`Pay RTGS$ ${totalAmount}`}</Button>
-                  </FormControl>
-                  <FormControl py={2}>
-                    <Button onClick={onClose} isFullWidth variant="outline">
-                      Cancel
-                    </Button>
-                  </FormControl>
+                  <Box mt={4} experimental_spaceY={2}>
+                    <FormControl>
+                      <Button
+                        isFullWidth
+                        colorScheme="blue"
+                        mr={3}
+                        type="submit"
+                        isLoading={loading}
+                      >{`Pay RTGS$ ${Intl.NumberFormat('en-us', {
+                        style: 'currency',
+                        currency: 'USD',
+                      }).format(totalAmount)}`}</Button>
+                    </FormControl>
+                    <FormControl>
+                      <Button onClick={onClose} isFullWidth variant="outline">
+                        Cancel
+                      </Button>
+                    </FormControl>
+                  </Box>
                 </form>
               </Box>
             ) : (
