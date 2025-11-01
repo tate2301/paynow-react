@@ -5,6 +5,12 @@
 
 > Not officially supported by Paynow.
 
+## 🔒 Security Notice
+
+**Version 2.0.0+** implements a secure architecture that keeps your `integration_key` safe on the server side. Your integration key should **never** be exposed to client-side code.
+
+If you're upgrading from v1.x, please read the [Migration Guide](./MIGRATION-GUIDE.md).
+
 # Getting started
 
 Before you can start making requests to Paynow's API, you need to get an integration ID and integration Key from Paynow. Sign in to Paynow and get integration details. [Here's](https://developers.paynow.co.zw/docs/integration_generation.html) a detailed guide on how to go about this process.
@@ -19,7 +25,29 @@ Install the library using NPM or yarn
    npm install paynow-react
 ```
 
-## Set up Provider
+## Prerequisites
+
+⚠️ **Important**: This library requires a backend server to function securely. You cannot use Paynow React without a server-side component.
+
+Your server will:
+- Store your `integration_key` securely
+- Handle Paynow API calls
+- Generate cryptographic hashes
+
+See [server-example.js](./server-example.js) for a complete implementation.
+
+## Quick Start
+
+### 1. Set up your server
+
+Create a backend API with the following endpoints:
+- `POST /api/paynow/init` - Initialize web payments
+- `POST /api/paynow/init-mobile` - Initialize mobile payments
+- `POST /api/paynow/poll` - Check payment status
+
+See [server-example.js](./server-example.js) for a complete Express.js implementation, or check the [Migration Guide](./MIGRATION-GUIDE.md) for Next.js, Vercel, and other frameworks.
+
+### 2. Set up Provider in your React app
 
 For Paynow React to work correctly, you need to set up the PaynowWrapper at the root of your application.
 
@@ -32,13 +60,14 @@ import * as React from 'react';
 import { PaynowReactWrapper } from 'paynow-react';
 
 function App({ Component }) {
-  // 2. Use at the root of your app
+  // 2. Configure with your server endpoint
   const paynow_config = {
     integration_id: 'your-integration-id',
-    integration_key: 'your-integration-key',
-    result_url: 'default-result-url',
-    return_url: 'default-return-url',
+    apiEndpoint: 'http://localhost:3001/api/paynow', // Your backend API
+    result_url: 'https://yourdomain.com/payment/result',
+    return_url: 'https://yourdomain.com/payment/return',
   };
+  
   return (
     <PaynowReactWrapper {...paynow_config}>
       <Component />
@@ -46,6 +75,8 @@ function App({ Component }) {
   );
 }
 ```
+
+**Note**: The `integration_key` is now stored securely on your server, not passed to the React component.
 
 ## Types
 
@@ -129,3 +160,27 @@ const Checkout = () => {
 ## Contribution
 
 Please see our [contribution guidelines](https://github.com/tate2301/paynow-react/blob/main/CONTRIBUTING.md) to learn how you can contribute to this paynow-react.
+
+## Architecture & Security
+
+This library uses a **secure server-side proxy pattern** to protect your `integration_key`:
+
+```
+┌─────────────┐         ┌──────────────┐         ┌─────────────┐
+│             │         │              │         │             │
+│  React App  │────────▶│  Your Server │────────▶│  Paynow API │
+│  (Client)   │         │  (Backend)   │         │             │
+│             │         │              │         │             │
+└─────────────┘         └──────────────┘         └─────────────┘
+                        Has integration_key
+                        Generates hashes
+                        Validates responses
+```
+
+**Why this matters:**
+- Your `integration_key` is never exposed to the client
+- All cryptographic operations happen server-side
+- Your key cannot be extracted from your JavaScript bundle
+- Complies with security best practices
+
+For implementation details, see the [Migration Guide](./MIGRATION-GUIDE.md).

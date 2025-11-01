@@ -15,12 +15,12 @@ export default function PaynowReactWrapper(props: PaynowReactProps) {
 const PaynowWrapperConsumer = (props: PaynowReactProps) => {
   const { setData } = React.useContext(PaynowContext);
   React.useEffect(() => {
-    const { integration_id, integration_key, result_url, return_url } = props;
+    const { integration_id, result_url, return_url, apiEndpoint } = props;
     setData({
       integration_id,
-      integration_key,
       result_url,
       return_url,
+      apiEndpoint,
     });
   }, []);
   return <>{props.children}</>;
