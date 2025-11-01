@@ -55,8 +55,6 @@ export default function PaymentModal({
   }, 0);
 
   const isMobilePayment = paymentMode === 'mobile';
-
-  useEffect(() => {}, [items, label, paymentMode]);
   /*
   const subtract = (index: number) => {
     if (myItems[index].quantity > 1) {

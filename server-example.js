@@ -71,7 +71,7 @@ app.post('/api/paynow/init', async (req, res) => {
 
     // Add items to payment
     items.forEach(item => {
-      payment.add(item.title, item.amount * item.quantity);
+      payment.add(item.title, item.amount, item.quantity);
     });
 
     // Send payment to Paynow
@@ -149,7 +149,7 @@ app.post('/api/paynow/init-mobile', async (req, res) => {
 
     // Add items to payment
     items.forEach(item => {
-      payment.add(item.title, item.amount * item.quantity);
+      payment.add(item.title, item.amount, item.quantity);
     });
 
     // Send mobile payment to Paynow
