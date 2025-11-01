@@ -1,14 +1,20 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { createContext } from 'react';
-import Paynow from './lib/paynow';
+
+type PaynowConfig = {
+  integration_id: string;
+  result_url: string;
+  return_url: string;
+  apiEndpoint: string;
+};
 
 type PaynowContextType = {
-  paynow: Paynow | null;
-  setData: (data: any) => void;
+  config: PaynowConfig | null;
+  setData: (data: PaynowConfig) => void;
 };
 
 export const PaynowContext = createContext<PaynowContextType>({
-  paynow: null,
+  config: null,
   setData: () => {},
 });
 
@@ -17,34 +23,14 @@ export const PaynowContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [data, setData] = useState<{
-    integration_id: string;
-    integration_key: string;
-    result_url: string;
-    return_url: string;
-  }>({
-    integration_id: '',
-    integration_key: '',
-    result_url: '',
-    return_url: '',
-  });
-  let [paynow, setPaynow] = useState<Paynow | null>(null);
+  const [config, setConfig] = useState<PaynowConfig | null>(null);
 
-  const updateValues = (data: any) => {
-    setData(data);
+  const updateValues = (data: PaynowConfig) => {
+    setConfig(data);
   };
 
-  useEffect(() => {
-    const { integration_id, integration_key, result_url, return_url } = data;
-    if (integration_id && integration_key && result_url && return_url) {
-      setPaynow(
-        new Paynow(integration_id, integration_key, result_url, return_url)
-      );
-    }
-  }, [data]);
-
   return (
-    <PaynowContext.Provider value={{ paynow, setData: updateValues }}>
+    <PaynowContext.Provider value={{ config, setData: updateValues }}>
       {children}
     </PaynowContext.Provider>
   );

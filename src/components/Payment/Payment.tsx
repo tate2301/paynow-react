@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { PaymentProps } from '../../lib/types';
 import { getMobileNetworkForNumber } from '../../lib/util';
+import { PaynowClient } from '../../lib/paynowClient';
 
 export default function PaymentModal({
   items,
@@ -29,10 +30,24 @@ export default function PaymentModal({
   isOpen,
   onClose,
 }: PaymentProps) {
-  const { paynow } = useContext(PaynowContext);
+  const { config } = useContext(PaynowContext);
   const [myItems] = useState(items);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [paynowClient, setPaynowClient] = useState<PaynowClient | null>(null);
+
+  // Initialize PaynowClient when config is available
+  useEffect(() => {
+    if (config) {
+      const client = new PaynowClient(
+        config.apiEndpoint,
+        config.integration_id,
+        config.result_url,
+        config.return_url
+      );
+      setPaynowClient(client);
+    }
+  }, [config]);
 
   // Get total of items in cart
   const totalAmount = myItems.reduce((acc, item) => {
@@ -56,7 +71,7 @@ export default function PaymentModal({
   };
 */
 
-  const submitMobilePayment = (e: any) => {
+  const submitMobilePayment = async (e: any) => {
     e.preventDefault();
     const phone = e.target.phone.value;
     const email = e.target.email.value;
@@ -65,58 +80,88 @@ export default function PaymentModal({
       return;
     }
 
+    if (!paynowClient) {
+      setError('Paynow client not initialized. Please check your configuration.');
+      return;
+    }
+
     let paidOrError = false;
 
     setLoading(true);
-    const payment = paynow?.createPayment(label, email);
-    items.map(item => payment?.add(item.title, item.amount, item.quantity));
-    paynow
-      ?.sendMobile(payment!, phone, getMobileNetworkForNumber(phone))
-      .then(data => {
-        console.log(data);
-        let pollInterval = setInterval(() => {
-          paynow
-            .pollTransaction(data?.pollUrl as string)
-            .then(data => {
-              if (data?.status === 'paid' && !paidOrError) {
-                setLoading(false);
-                paidOrError = true;
-                closeModal({ paid: true, phone, email });
-                return clearInterval(pollInterval);
-              } else if (data?.status === 'cancelled' && !paidOrError) {
-                setLoading(false);
-                setError(
-                  'The payment has been cancelled by the user. Please try again.'
-                );
-                paidOrError = true;
-                closeModal({ paid: false, phone, email });
+    setError('');
 
-                return clearInterval(pollInterval);
-              }
-            })
-            .catch(err => {
-              setError(err.message);
-            });
-        }, 1000);
-      })
-      .catch(err => {
+    try {
+      const response = await paynowClient.initMobilePayment(
+        label,
+        items,
+        phone,
+        email,
+        getMobileNetworkForNumber(phone)
+      );
+
+      if (!response.success || !response.pollUrl) {
         setLoading(false);
-        setError(err);
-      });
+        setError(response.error || 'Failed to initialize mobile payment');
+        return;
+      }
+
+      // Poll for payment status
+      let pollInterval = setInterval(async () => {
+        try {
+          const status = await paynowClient.pollTransaction(response.pollUrl!);
+          
+          if (status.status === 'paid' && !paidOrError) {
+            setLoading(false);
+            paidOrError = true;
+            closeModal({ paid: true, phone, email });
+            clearInterval(pollInterval);
+          } else if (status.status === 'cancelled' && !paidOrError) {
+            setLoading(false);
+            setError(
+              'The payment has been cancelled by the user. Please try again.'
+            );
+            paidOrError = true;
+            closeModal({ paid: false, phone, email });
+            clearInterval(pollInterval);
+          }
+        } catch (err) {
+          console.error('Error polling transaction:', err);
+          setError((err as Error).message || 'Error checking payment status');
+          clearInterval(pollInterval);
+        }
+      }, 1000);
+    } catch (err) {
+      setLoading(false);
+      setError((err as Error).message || 'An error occurred while processing payment');
+    }
   };
 
-  const submitWebPayment = (e: any) => {
+  const submitWebPayment = async (e: any) => {
     e.preventDefault();
-    setLoading(true);
-    const payment = paynow?.createPayment(label);
-    items.map(item => payment?.add(item.title, item.amount, item.quantity));
 
-    paynow
-      ?.send(payment!)
-      .then(data => {
-        window.location.href = data!!.redirectUrl as string;
-      })
-      .catch(err => setError(err ?? 'A network error occured'));
+    if (!paynowClient) {
+      setError('Paynow client not initialized. Please check your configuration.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await paynowClient.initPayment(label, items);
+
+      if (!response.success || !response.redirectUrl) {
+        setLoading(false);
+        setError(response.error || 'Failed to initialize payment');
+        return;
+      }
+
+      // Redirect to Paynow payment page
+      window.location.href = response.redirectUrl;
+    } catch (err) {
+      setLoading(false);
+      setError((err as Error).message || 'A network error occurred');
+    }
   };
 
   const closeModal = (data?: any) => {
